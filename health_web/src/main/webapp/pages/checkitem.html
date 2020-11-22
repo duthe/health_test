@@ -282,18 +282,6 @@
                 },
                 //分页查询
                 findPage() {
-                    // axios.get("/checkitem/findAll.do").then(response=>{
-                    //     if (response.data.flag) {
-                    //         this.dataList = response.data.data;
-                    //     } else {
-                    //         this.$message({
-                    //                   showClose: true,
-                    //                   message: response.data.message,
-                    //                   type: 'error'
-                    //                 });
-                    //     }
-                    // })
-
                     axios.post("/checkitem/findPage.do", this.pagination).then(response=>{
                         if (response.data.flag) {
                             this.dataList = response.data.data.rows;

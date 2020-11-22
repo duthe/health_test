@@ -14,5 +14,44 @@
     <insert id="addCheckGroupCheckItem" parameterType="int">
         insert into t_checkgroup_checkitem (checkgroup_id, checkitem_id) values (#{checkGroupId}, #{checkitemId});
     </insert>
+
+
+    <select id="findByCondition" parameterType="string" resultType="CheckGroup">
+        select * from t_checkgroup
+        <where>
+            <if test="value != null and value.length > 0">
+                code like #{value} or name like #{value} or helpCode like #{value}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById" parameterType="int" resultType="CheckGroup">
+        select * from t_checkgroup where id = #{id};
+    </select>
+
+
+    <select id="findCheckItemIdsByCheckGroupId" parameterType="int" resultType="int">
+        select checkitem_id from t_checkgroup_checkitem where checkgroup_id = #{checkGroupId};
+    </select>
+
+
+    <update id="update" parameterType="CheckGroup">
+        update t_checkgroup set code=#{code},name=#{name},helpCode=#{helpCode},sex=#{sex},remark=#{remark},attention=#{attention}
+         where id = #{id}
+    </update>
+
+    <delete id="deleteCheckGroupCheckItemByCheckGroupId" parameterType="int">
+        delete from t_checkgroup_checkitem where checkgroup_id = #{id}
+    </delete>
     
+    
+    <select id="findCountSetMealCheckGroupByCheckGroupId" parameterType="int" resultType="int">
+        select count(0) from t_setmeal_checkgroup where checkgroup_id = #{id};
+    </select>
+
+
+    <delete id="deleteById" parameterType="int">
+        delete from t_checkgroup where id = #{id}
+    </delete>
+
 </mapper>

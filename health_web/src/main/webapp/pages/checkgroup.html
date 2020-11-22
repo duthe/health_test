@@ -55,7 +55,7 @@
                 <div class="box">
                     <div class="filter-container">
                         <el-input placeholder="编码/名称/助记码" v-model="pagination.queryString" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"></el-input>
-                        <el-button @click="findPage()" class="dalfBut">查询</el-button>
+                        <el-button @click="handleCurrentChange(1)" class="dalfBut">查询</el-button>
                         <el-button type="primary" class="butT" @click="handleCreate()">新建</el-button>
                     </div>
                     <el-table size="small" current-row-key="id" :data="dataList" stripe highlight-current-row>
@@ -266,7 +266,7 @@
                 pagination: {//分页相关属性
                     currentPage: 1,
                     pageSize:10,
-                    total:100,
+                    total:0,
                     queryString:null,
                 },
                 dataList: [],//列表数据
@@ -282,6 +282,24 @@
             methods: {
                 //编辑
                 handleEdit() {
+                    axios.post("/checkGroup/update.do?checkitemIds=" + this.checkitemIds, this.formData).then(response=>{
+                        if (response.data.flag) {
+                            this.$message({
+                                showClose: true,
+                                message: response.data.message,
+                                type: 'success'
+                            });
+                            this.dialogFormVisible4Edit = false;
+                            this.findPage();
+                        } else {
+                            this.$message({
+                                showClose: true,
+                                message: response.data.message,
+                                type: 'error'
+                            });
+                        }
+                    })
+
                 },
                 //添加
                 handleAdd () {
@@ -309,6 +327,20 @@
                 },
                 //分页查询
                 findPage() {
+                    axios.post("/checkGroup/findByPage.do", this.pagination).then(response=>{
+                        if (response.data.flag) {
+                            this.dataList = response.data.data.rows;
+                            this.pagination.total = response.data.data.total;
+                        } else {
+                            this.$message({
+                                      showClose: true,
+                                      message: response.data.message,
+                                      type: 'error'
+                                    });
+                        }
+                    })
+
+
                 },
                 // 重置表单
                 resetForm() {
@@ -321,9 +353,51 @@
                 handleCreate() {
                     this.resetForm();
                     this.dialogFormVisible = true;
+
+                    //查询所有检查项
+                    this.findAll();
+
+                },
+
+                findAll(id) {
                     axios.get("/checkitem/findAll.do").then(response=>{
                         if (response.data.flag) {
                             this.tableData = response.data.data;
+                            if (id) {
+                                axios.get("/checkGroup/findCheckItemIdsByCheckGroupId.do?checkGroupId=" + id).then(resp=>{
+                                    if (resp.data.flag) {
+                                        this.checkitemIds = resp.data.data;
+                                    } else {
+                                        this.$message({
+                                                  showClose: true,
+                                                  message: resp.data.message,
+                                                  type: 'error'
+                                                });
+                                    }
+                                })
+                            }
+                        } else {
+                            this.$message({
+                                showClose: true,
+                                message: response.data.message,
+                                type: 'error'
+                            });
+                        }
+                    })
+                },
+
+
+                // 弹出编辑窗口
+                handleUpdate(row) {
+                    this.resetForm();
+                    this.dialogFormVisible4Edit = true;
+
+                    axios.get("/checkGroup/findById.do?id=" + row.id).then(response=>{
+                        if (response.data.flag) {
+                            this.formData = response.data.data;
+                            //查询所有检查项 和 CheckItemIds
+                            this.findAll(row.id);
+
                         } else {
                             this.$message({
                                       showClose: true,
@@ -335,14 +409,38 @@
 
 
                 },
-                // 弹出编辑窗口
-                handleUpdate(row) {
-                },
                 //切换页码
                 handleCurrentChange(currentPage) {
+                    this.pagination.currentPage = currentPage;
+                    this.findPage();
                 },
                 // 删除
                 handleDelete(row) {
+
+                    this.$confirm('此操作将永久删除该检查组, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+
+                        axios.get("/checkGroup/deleteById.do?id=" + row.id).then(response=>{
+                            if (response.data.flag) {
+                                this.$message({
+                                    showClose: true,
+                                    message: response.data.message,
+                                    type: 'success'
+                                });
+                                this.findPage();
+                            } else {
+                                this.$message({
+                                    showClose: true,
+                                    message: response.data.message,
+                                    type: 'error'
+                                });
+                            }
+                        })
+
+                    })
                 }
             }
         })
