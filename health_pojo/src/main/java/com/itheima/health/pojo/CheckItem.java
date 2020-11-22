@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 /**
  * 检查项
+ *
  */
+
 
 public class CheckItem implements Serializable {
     private Integer id;//主键
