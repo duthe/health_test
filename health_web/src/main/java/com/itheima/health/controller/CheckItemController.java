@@ -5,7 +5,6 @@ import com.itheima.health.constant.MessageConstant;
 import com.itheima.health.entity.PageResult;
 import com.itheima.health.entity.QueryPageBean;
 import com.itheima.health.entity.Result;
-import com.itheima.health.exception.HealthException;
 import com.itheima.health.pojo.CheckItem;
 import com.itheima.health.service.CheckItemService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,12 +58,7 @@ public class CheckItemController {
     @PostMapping
     @RequestMapping("/deleteById")
     public Result DeleteById(int id){
-        try {
-            checkItemService.deleteById(id);
-            return new Result(true, MessageConstant.DELETE_CHECKITEM_SUCCESS);
-        } catch (HealthException e) {
-            e.printStackTrace();
-            return new Result(false, e.getMessage());
-        }
+        checkItemService.deleteById(id);
+        return new Result(true, MessageConstant.DELETE_CHECKITEM_SUCCESS);
     }
 }

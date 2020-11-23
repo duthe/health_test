@@ -4,7 +4,6 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.StringUtil;
-import com.itheima.health.constant.MessageConstant;
 import com.itheima.health.dao.CheckGroupDao;
 import com.itheima.health.entity.PageResult;
 import com.itheima.health.entity.QueryPageBean;
@@ -73,7 +72,7 @@ public class CheckGroupServiceImpl implements CheckGroupService {
     @Override
     @Transactional
     public void deleteById(int id) throws HealthException {
-//        检查改检查组是否被套餐使用 如果被使用不能删除 如果未使用则删除
+//        检查该检查组是否被套餐使用 如果被使用不能删除 如果未使用则删除
        int count = checkGroupDao.findCountSetMealCheckGroupByCheckGroupId(id);
 
         if (count > 0) {

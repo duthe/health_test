@@ -5,7 +5,6 @@ import com.itheima.health.constant.MessageConstant;
 import com.itheima.health.entity.PageResult;
 import com.itheima.health.entity.QueryPageBean;
 import com.itheima.health.entity.Result;
-import com.itheima.health.exception.HealthException;
 import com.itheima.health.pojo.CheckGroup;
 import com.itheima.health.service.CheckGroupService;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,13 +55,8 @@ public class CheckGroupController {
 
     @RequestMapping("/deleteById")
     public Result deleteById(int id) {
-        try {
             checkGroupService.deleteById(id);
             return new Result(true, MessageConstant.DELETE_CHECKGROUP_SUCCESS);
-        } catch (HealthException e) {
-            e.printStackTrace();
-            return new Result(false, e.getMessage());
-        }
     }
 
 
