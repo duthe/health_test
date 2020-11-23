@@ -69,6 +69,8 @@ public class CheckGroupServiceImpl implements CheckGroupService {
         }
     }
 
+
+
     @Override
     @Transactional
     public void deleteById(int id) throws HealthException {
@@ -84,5 +86,10 @@ public class CheckGroupServiceImpl implements CheckGroupService {
         checkGroupDao.deleteById(id);
 
 
+    }
+
+    @Override
+    public List<CheckGroup> findAll() {
+        return checkGroupDao.findAll();
     }
 }

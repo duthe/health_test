@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.itheima.health.dao.SetMealDao">
+    <select id="findCondition" parameterType="string" resultType="Setmeal">
+        select * from t_setmeal
+        <where>
+            <if test="value != null and value.length > 0">
+                name like #{value} or code like #{value} or helpCode like #{value}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="add" parameterType="Setmeal">
+        <selectKey resultType="int" keyProperty="id" keyColumn="id" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into t_setmeal (name ,code ,helpCode ,sex ,age ,price ,remark ,attention ,img)
+        values ( #{name} ,#{code} ,#{helpCode} ,#{sex} ,#{age} ,#{price} ,#{remark} ,#{attention} ,#{img});
+    </insert>
+
+
+    <insert id="addSetMealCheckGroup" parameterType="int">
+        insert into t_setmeal_checkgroup (setmeal_id, checkgroup_id) values (#{setmeal_id},#{checkgroup_id});
+    </insert>
+
+
+    <select id="findById" parameterType="int" resultType="Setmeal">
+        select * from t_setmeal where id = #{id};
+    </select>
+
+    <select id="findSetMealCheckGroupBySetMeaId" parameterType="int" resultType="int">
+        select checkgroup_id from t_setmeal_checkgroup where setmeal_id = #{setMeaId};
+    </select>
+    
+    <update id="update" parameterType="Setmeal" >
+        update t_setmeal
+        set name=#{name} ,code=#{code} ,helpCode=#{helpCode} ,sex=#{sex} ,age=#{age} ,price=#{price} ,remark=#{remark} ,attention=#{attention} ,img=#{img}
+        where id=#{id};
+    </update>
+
+
+    <delete id="deleteSetMealCheckGroupBySetMealId" parameterType="int">
+        delete from t_setmeal_checkgroup where setmeal_id = #{id}
+    </delete>
+
+    <select id="findCountOrderBySetMealId" parameterType="int" resultType="int">
+        select count(0) from t_order where setmeal_id = #{id};
+    </select>
+
+    <delete id="deleteById" parameterType="int" >
+        delete from t_setmeal where id = #{id}
+    </delete>
+
+</mapper>

@@ -22,4 +22,7 @@ public interface CheckGroupService {
     void update(CheckGroup checkGroup, Integer[] checkitemIds);
 
     void deleteById(int id) throws HealthException;
+
+    List<CheckGroup> findAll();
+
 }
