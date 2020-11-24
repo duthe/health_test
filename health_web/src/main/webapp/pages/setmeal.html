@@ -371,6 +371,8 @@
             methods: {
                 //文件上传成功后的钩子，response为服务端返回的值，file为当前上传的文件封装成的js对象
                 handleAvatarSuccess(response, file) {
+                    this.imageUrl = response.data.domain + response.data.imgName;
+                    this.formData.img = response.data.imgName;
                 },
                 //上传图片之前执行
                 beforeAvatarUpload(file) {
@@ -386,7 +388,7 @@
                 },
                 //添加
                 handleAdd () {
-                    this.formData.img = this.imageUrl;
+
                     axios.post("/setmeal/add.do?checkgroupIds=" + this.checkgroupIds, this.formData).then(response=>{
                         if (response.data.flag) {
                             this.dialogFormVisible = false;
@@ -430,6 +432,7 @@
                     this.tableData = [];
                     this.checkgroupIds = [];
                     this.activeName = 'first';
+                    this.imageUrl = null;
                 },
                 // 弹出添加窗口
                 handleCreate() {
@@ -459,7 +462,8 @@
                     this.dialogFormVisible4Edit = true;
                     axios.get("/setmeal/findById.do?id=" + row.id).then(response=>{
                         if (response.data.flag) {
-                            this.formData = response.data.data;
+                            this.formData = response.data.data.setMeal;
+                            this.imageUrl = response.data.data.domain + this.formData.img;
 
                             axios.get("/checkGroup/findAll.do").then(resp=>{
                                 if (resp.data.flag) {
@@ -499,7 +503,6 @@
                 },
 
                 handleEdit(){
-                    this.formData.img = this.imageUrl;
                     axios.post("/setmeal/update.do?checkgroupIds=" + this.checkgroupIds, this.formData).then(response=>{
                         if (response.data.flag) {
                             this.$message({
@@ -521,7 +524,7 @@
                 },
 
                 handleDelete(row){
-                    this.$confirm('此操作将永久删除该检查项, 是否继续?', '提示', {
+                    this.$confirm('此操作将永久删除该套餐, 是否继续?', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
