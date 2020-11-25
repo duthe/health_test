@@ -24,4 +24,6 @@ public interface SetMealDao {
     int findCountOrderBySetMealId(int id);
 
     void deleteById(int id);
+
+    List<String> findImgs();
 }

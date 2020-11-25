@@ -87,7 +87,7 @@ public class SetMealController {
             return new Result(true, MessageConstant.PIC_UPLOAD_SUCCESS, resultMap);
         } catch (IOException e) {
             //e.printStackTrace();
-            //抛给全局异常处理类处理 是否可行???
+            //TODO:抛给全局异常处理类处理 是否可行???  或者直接方法上抛
             throw new RuntimeException(e.getMessage());
 
         }
