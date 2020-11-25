@@ -21,6 +21,10 @@ public class CheckItemController {
     private CheckItemService checkItemService;
 
 
+    /**
+     * 查找所有检查项
+     * @return
+     */
     @RequestMapping("/findAll")
     public Result findAll() {
         List<CheckItem> checkItemList = checkItemService.findAll();
@@ -28,6 +32,11 @@ public class CheckItemController {
     }
 
 
+    /**
+     * 添加检查项
+     * @param checkItem
+     * @return
+     */
     @RequestMapping("/add")
     public Result add(@RequestBody CheckItem checkItem) {
         checkItemService.add(checkItem);
@@ -35,6 +44,11 @@ public class CheckItemController {
     }
 
 
+    /**
+     * 分页查找检查项
+     * @param queryPageBean
+     * @return
+     */
     @RequestMapping("/findPage")
     public Result findByPage(@RequestBody QueryPageBean queryPageBean){
         PageResult<CheckItem> checkItemPageResult = checkItemService.findByPage(queryPageBean);
@@ -42,6 +56,11 @@ public class CheckItemController {
     }
 
 
+    /**
+     * 根据id查找检查项
+     * @param id
+     * @return
+     */
     @RequestMapping("/findById")
     public Result findById(int id){
         CheckItem checkItem = checkItemService.findById(id);
@@ -49,12 +68,22 @@ public class CheckItemController {
     }
 
 
+    /**
+     * 更新检查项信息
+     * @param checkItem
+     * @return
+     */
     @RequestMapping("/update")
     public Result update(@RequestBody CheckItem checkItem) {
         checkItemService.update(checkItem);
         return new Result(true, MessageConstant.EDIT_CHECKITEM_SUCCESS);
     }
 
+    /**
+     * 根据id删除检查项
+     * @param id
+     * @return
+     */
     @PostMapping
     @RequestMapping("/deleteById")
     public Result DeleteById(int id){

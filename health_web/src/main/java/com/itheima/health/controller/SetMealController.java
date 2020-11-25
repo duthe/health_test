@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+
 @RestController
 @RequestMapping("/setmeal")
 public class SetMealController {
@@ -28,6 +29,11 @@ public class SetMealController {
     private SetMealService setMealService;
 
 
+    /**
+     * 分页查找套餐信息
+     * @param queryPageBean
+     * @return
+     */
     @RequestMapping("/findByPage")
     public Result findByPage(@RequestBody QueryPageBean queryPageBean) {
        PageResult<Setmeal> setMealPageResult = setMealService.findByPage(queryPageBean);
@@ -35,6 +41,12 @@ public class SetMealController {
     }
 
 
+    /**
+     * 添加套餐
+     * @param setmeal
+     * @param checkgroupIds
+     * @return
+     */
     @RequestMapping("/add")
     //@RequestParam List<Integer> checkgroupIds 可以获取
     public Result add(@RequestBody Setmeal setmeal, Integer[] checkgroupIds){
@@ -43,6 +55,11 @@ public class SetMealController {
     }
 
 
+    /**
+     * 根据id查询套餐信息
+     * @param id
+     * @return
+     */
     @RequestMapping("/findById")
     public Result findById(int id){
         Setmeal setmeal = setMealService.findById(id);
@@ -53,6 +70,11 @@ public class SetMealController {
     }
 
 
+    /**
+     * 根据套餐id查询该套餐关联的检查组
+     * @param setMeaId
+     * @return
+     */
     @RequestMapping("/findSetMealCheckGroupBySetMeaId")
     public Result findSetMealCheckGroupBySetMeaId(int setMeaId) {
         List<Integer> integers = setMealService.findSetMealCheckGroupBySetMeaId(setMeaId);
@@ -60,6 +82,12 @@ public class SetMealController {
     }
 
 
+    /**
+     * 更新套餐
+     * @param setmeal
+     * @param checkgroupIds
+     * @return
+     */
     @RequestMapping("/update")
     public Result update(@RequestBody Setmeal setmeal, Integer[] checkgroupIds){
         setMealService.update(setmeal, checkgroupIds);
@@ -67,6 +95,11 @@ public class SetMealController {
     }
 
 
+    /**
+     * 根据id删除套餐
+     * @param id
+     * @return
+     */
     @RequestMapping("/deleteById")
     public Result deleteById(int id) {
         setMealService.deleteById(id);
@@ -74,15 +107,20 @@ public class SetMealController {
     }
 
 
+    /**
+     * 接收上传套餐图片
+     * @param imgFile
+     * @return
+     */
     @RequestMapping("/upload")
     public Result upload(MultipartFile imgFile) {
-        String originalFilename = imgFile.getOriginalFilename();
-        String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
-        String imgName = UUID.randomUUID().toString() + suffix;
+        String originalFilename = imgFile.getOriginalFilename(); //获取文件名
+        String suffix = originalFilename.substring(originalFilename.lastIndexOf(".")); //获取文件后缀名
+        String imgName = UUID.randomUUID().toString() + suffix; //生成随机文件名 防止文件冲突
         try {
-            QiNiuUtils.uploadViaByte(imgFile.getBytes(), imgName);
+            QiNiuUtils.uploadViaByte(imgFile.getBytes(), imgName); //上传到七牛
             Map resultMap = new HashMap();
-            resultMap.put("domain", QiNiuUtils.DOMAIN);
+            resultMap.put("domain", QiNiuUtils.DOMAIN); //域名
             resultMap.put("imgName", imgName);
             return new Result(true, MessageConstant.PIC_UPLOAD_SUCCESS, resultMap);
         } catch (IOException e) {

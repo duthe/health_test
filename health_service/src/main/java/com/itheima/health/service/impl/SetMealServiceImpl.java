@@ -22,7 +22,11 @@ public class SetMealServiceImpl implements SetMealService {
     private SetMealDao setMealDao;
 
 
-
+    /**
+     * 分页查询套餐
+     * @param queryPageBean
+     * @return
+     */
     @Override
     public PageResult<Setmeal> findByPage(QueryPageBean queryPageBean) {
         PageHelper.startPage(queryPageBean.getCurrentPage(), queryPageBean.getPageSize());
@@ -34,6 +38,11 @@ public class SetMealServiceImpl implements SetMealService {
         return new PageResult<Setmeal>(page.getTotal(), page.getResult());
     }
 
+    /**
+     * 添加套餐
+     * @param setmeal
+     * @param checkGroupIds
+     */
     @Override
     @Transactional
     public void add(Setmeal setmeal, Integer[] checkGroupIds) {
@@ -45,16 +54,31 @@ public class SetMealServiceImpl implements SetMealService {
         }
     }
 
+    /**
+     * 根据id查询套餐
+     * @param id
+     * @return
+     */
     @Override
     public Setmeal findById(int id) {
         return setMealDao.findById(id);
     }
 
+    /**
+     * 根据套餐id查询该套餐关联的检查组
+     * @param setMeaId
+     * @return
+     */
     @Override
     public List<Integer> findSetMealCheckGroupBySetMeaId(int setMeaId) {
         return setMealDao.findSetMealCheckGroupBySetMeaId(setMeaId);
     }
 
+    /**
+     * 更新套餐信息
+     * @param setmeal
+     * @param checkGroupIds
+     */
     @Override
     @Transactional
     public void update(Setmeal setmeal, Integer[] checkGroupIds) {
@@ -70,6 +94,11 @@ public class SetMealServiceImpl implements SetMealService {
         }
     }
 
+    /**
+     * 根据id删除套餐
+     * @param id
+     * @throws HealthException
+     */
     @Override
     @Transactional
     public void deleteById(int id) throws HealthException {
@@ -83,6 +112,10 @@ public class SetMealServiceImpl implements SetMealService {
         setMealDao.deleteById(id);
     }
 
+    /**
+     * 获取数据库中存储的所有图片名字 删除垃圾图片使用
+     * @return
+     */
     @Override
     public List<String> findImgs() {
         return setMealDao.findImgs();

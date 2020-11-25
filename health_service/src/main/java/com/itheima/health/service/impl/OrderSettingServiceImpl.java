@@ -25,9 +25,8 @@ public class OrderSettingServiceImpl implements OrderSettingService {
     @Transactional
     public void batchAdd(List<OrderSetting> orderSettingList) {
 
-        /**
-         * 遍历集合设置每条预约信息
-         */
+
+         //遍历集合设置每条预约信息
         for (OrderSetting orderSetting : orderSettingList) {
             updateOrderSetting(orderSetting);
 

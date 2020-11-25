@@ -57,16 +57,31 @@ public class CheckItemServiceImpl implements CheckItemService {
         return new PageResult<CheckItem>(checkItemPage.getTotal(), checkItemPage.getResult());
     }
 
+    /**
+     * 根据id查找检查项
+     * @param id
+     * @return
+     */
     @Override
     public CheckItem findById(int id) {
         return checkItemDao.findById(id);
     }
 
+    /**
+     * 跟新检查项信息
+     * @param checkItem
+     */
     @Override
     public void update(CheckItem checkItem) {
         checkItemDao.update(checkItem);
     }
 
+
+    /**
+     * 根据id删除检查项
+     * @param id
+     * @throws HealthException
+     */
     @Override
     public void deleteById(int id) throws HealthException {
         // 检查 检查项是否被检查组使用了
