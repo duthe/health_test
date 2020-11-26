@@ -71,4 +71,18 @@ public interface SetMealDao {
      * @return
      */
     List<String> findImgs();
+
+
+    /**
+     * 查询所有套餐信息
+     * @return
+     */
+    List<Setmeal> findAll();
+
+
+    /**
+     * 根据套餐id查询套餐详细信息 包括检查组 检查项
+     * @return
+     */
+    Setmeal findSetMealDetailById(Integer id);
 }

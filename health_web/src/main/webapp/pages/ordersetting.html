@@ -142,7 +142,7 @@
                 //根据月份获取预约数据
                 findOrderSettingByMonth(){
                     var month = this.currentYear + "-" + (this.currentMonth < 10 ? ("0" + this.currentMonth) : this.currentMonth)
-                    console.log(month)
+                    //console.log(month)
                     axios.get("/ordersetting/findOrderSettingByMonth.do?month="+ month).then(response=>{
                         if (response.data.flag) {
                             this.leftobj = response.data.data;

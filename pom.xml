@@ -15,6 +15,7 @@
         <module>health_service</module>
         <module>health_web</module>
         <module>health_job</module>
+        <module>health_mobile</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
@@ -234,6 +235,19 @@
                 <artifactId>xml-apis</artifactId>
                 <version>1.4.01</version>
             </dependency>
+
+            <!--阿里云服务器短信平台-->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>3.3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <dependencies>
