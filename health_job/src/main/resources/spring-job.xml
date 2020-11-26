@@ -14,6 +14,8 @@
     <dubbo:registry address="zookeeper://localhost:2181"/>
     <dubbo:annotation package="com.itheima.health.job"/>
 
+    <import resource="classpath:spring-freemarker.xml"/>
+
 
 
  </beans>

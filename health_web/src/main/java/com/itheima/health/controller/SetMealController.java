@@ -9,10 +9,13 @@ import com.itheima.health.entity.Result;
 import com.itheima.health.pojo.Setmeal;
 import com.itheima.health.service.SetMealService;
 import com.itheima.health.utils.QiNiuUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -27,6 +30,8 @@ public class SetMealController {
 
     @Reference
     private SetMealService setMealService;
+    @Autowired
+    private JedisPool jedisPool;
 
 
     /**
@@ -50,7 +55,12 @@ public class SetMealController {
     @RequestMapping("/add")
     //@RequestParam List<Integer> checkgroupIds 可以获取
     public Result add(@RequestBody Setmeal setmeal, Integer[] checkgroupIds){
-        setMealService.add(setmeal, checkgroupIds);
+        Integer setMealId = setMealService.add(setmeal, checkgroupIds);
+
+        //添加静态化任务
+        Jedis jedis = jedisPool.getResource();
+        jedis.sadd("setMeal:static:html",setMealId + "|1|" + System.currentTimeMillis());
+        jedis.close();
         return new Result(true, MessageConstant.ADD_SETMEAL_SUCCESS);
     }
 
@@ -91,6 +101,11 @@ public class SetMealController {
     @RequestMapping("/update")
     public Result update(@RequestBody Setmeal setmeal, Integer[] checkgroupIds){
         setMealService.update(setmeal, checkgroupIds);
+
+        //添加静态化任务
+        Jedis jedis = jedisPool.getResource();
+        jedis.sadd("setMeal:static:html",setmeal.getId() + "|1|" + System.currentTimeMillis());
+        jedis.close();
         return new Result(true, "编辑套餐成功");
     }
 
@@ -103,6 +118,10 @@ public class SetMealController {
     @RequestMapping("/deleteById")
     public Result deleteById(int id) {
         setMealService.deleteById(id);
+        //添加静态化任务
+        Jedis jedis = jedisPool.getResource();
+        jedis.sadd("setMeal:static:html",id + "|0|" + System.currentTimeMillis());
+        jedis.close();
         return new Result(true, "删除套餐成功！");
     }
 

@@ -155,6 +155,13 @@
             <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
         </dependency>
 
+
+<!--        freemarker静态化依赖-->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+
     </dependencies>
 
 

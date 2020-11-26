@@ -21,7 +21,7 @@ public interface SetMealService {
      * @param setmeal
      * @param checkgroupIds
      */
-    void add(Setmeal setmeal, Integer[] checkgroupIds);
+    Integer add(Setmeal setmeal, Integer[] checkgroupIds);
 
     /**
      * 根据id查询套餐

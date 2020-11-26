@@ -49,4 +49,7 @@
         <property name="defaultEncoding" value="UTF-8"/>
     </bean>
 
+<!--    导入redis配置-->
+    <import resource="classpath:spring-redis.xml"/>
+
  </beans>

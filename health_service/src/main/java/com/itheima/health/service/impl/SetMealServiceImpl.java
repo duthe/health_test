@@ -45,13 +45,14 @@ public class SetMealServiceImpl implements SetMealService {
      */
     @Override
     @Transactional
-    public void add(Setmeal setmeal, Integer[] checkGroupIds) {
+    public Integer add(Setmeal setmeal, Integer[] checkGroupIds) {
         setMealDao.add(setmeal);
         if (checkGroupIds != null) {
             for (Integer checkGroupId : checkGroupIds) {
                 setMealDao.addSetMealCheckGroup(setmeal.getId() ,checkGroupId);
             }
         }
+        return setmeal.getId();
     }
 
     /**
