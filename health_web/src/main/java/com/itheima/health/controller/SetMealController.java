@@ -145,7 +145,7 @@ public class SetMealController {
         } catch (IOException e) {
             //e.printStackTrace();
             //TODO:抛给全局异常处理类处理 是否可行???  或者直接方法上抛
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e);
 
         }
 

@@ -46,7 +46,7 @@ public class OrderSettingServiceImpl implements OrderSettingService {
         if (dbOrderSetting != null) {
             //如果数据库有此日期预约数据 可预约人数不能小于已预约人数
             if (orderSetting.getNumber() < dbOrderSetting.getReservations()) {
-                throw new HealthException(orderSetting.getOrderDate() + "中可预约人数不能小于已预约人数");
+                throw new HealthException("可预约人数不能小于已预约人数");
             }
             orderSettingDao.updateNumberByOrderDate(orderSetting);
         } else {

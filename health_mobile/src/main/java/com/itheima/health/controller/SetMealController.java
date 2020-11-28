@@ -48,6 +48,21 @@ public class SetMealController {
     }
 
 
+    /**
+     * 根据ID查询套餐
+     * @param id
+     * @return
+     */
+    @RequestMapping("/findById")
+    public Result findById(int id) {
+        Setmeal setmeal = setMealService.findById(id);
+        //设置图片完整路径
+        setmeal.setImg(QiNiuUtils.DOMAIN + setmeal.getImg());
+        return new Result(true, MessageConstant.QUERY_SETMEAL_SUCCESS, setmeal);
+    }
+
+
+
 
 
 }

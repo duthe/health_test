@@ -29,11 +29,13 @@ public class ClearImgJob {
     @Scheduled(initialDelay = 5000, fixedDelay = 86400000)
     public void clearImg() {
         Log.info("开始清理图片....");
+        //获取七牛云中所有图片集合
         List<String> qnFileList = QiNiuUtils.listFile();
-        //TODO 非空判断？
         Log.debug("七牛云有{}张图片",qnFileList!=null?qnFileList.size():0);
+        //获取数据库中图片集合
         List<String> dbImgList = setMealService.findImgs();
         Log.debug("数据库中有{}张图片",dbImgList!=null?dbImgList.size():0);
+        //七牛云中图片减去数据库中图片得到垃圾图片集合
         qnFileList.removeAll(dbImgList);
         QiNiuUtils.removeFiles(qnFileList.toArray(new String[]{}));
         Log.info("清理{}张垃圾图片成功", qnFileList.size());

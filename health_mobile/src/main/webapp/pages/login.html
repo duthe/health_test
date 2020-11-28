@@ -69,11 +69,12 @@
                     }
                     validateCodeButton = $("#validateCodeButton")[0];
                     clock = window.setInterval(doLoop, 1000); //一秒执行一次
-                    axios.post("/validateCode/send4Login.do?telephone=" + telephone).then((response) => {
-                        if(!response.data.flag){
-                            //验证码发送失败
-                            this.$message.error('验证码发送失败，请检查手机号输入是否正确');
-                        }
+                    axios.get("/validateCode/send4Login.do?telephone=" + telephone).then((response) => {
+                        this.$message({
+                            showClose: true,
+                            message: response.data.message,
+                            type: response.data.flag?'success':'error'
+                        });
                     });
                 },
                 //登录
@@ -89,7 +90,8 @@
                             window.location.href="index.html";
                         }else{
                             //失败，提示失败信息
-                            this.$message.error(response.data.message);
+                            // this.$message.error(response.data.message);
+                            alert(response.data.message);
                         }
                     });
                 }
