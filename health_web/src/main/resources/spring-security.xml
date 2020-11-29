@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+
+<!--    过滤静态资源 不设置访问权限-->
+    <security:http pattern="/login.html" security="none"/>
+    <security:http pattern="/css/**" security="none"/>
+    <security:http pattern="/img/**" security="none"/>
+    <security:http pattern="/js/**" security="none"/>
+    <security:http pattern="/plugins/**" security="none"/>
+    <security:http pattern="/template/**" security="none"/>
+
+<!--    配置拦截规则-->
+    <security:http auto-config="true" use-expressions="true">
+<!--        拦截所有路径 认证成功才可以访问-->
+        <security:intercept-url pattern="/**" access="isAuthenticated()"/>
+        <security:form-login login-page="/login.html"
+                             login-processing-url="/login.do"
+                             username-parameter="username"
+                             password-parameter="password"
+                             default-target-url="/pages/main.html"
+                             always-use-default-target="true"/>
+
+<!--    文档嵌套访问策略-->
+        <security:headers>
+            <!--   frame-options 控制页面中嵌套frame（访问其它页面，把其它页面的内容展示在这个页面上)
+         policy 使用的策略:
+             DENY: 不允许访问
+             SAMEORIGIN: 同域可以访问
+             ALLOW-FROM: 指定url可以访问 -->
+            <security:frame-options policy="SAMEORIGIN"/>
+        </security:headers>
+        <!--关闭csrf-->
+        <security:csrf disabled="true"/>
+
+        <security:logout logout-url="/logout.do" invalidate-session="true" logout-success-url="/login.html"/>
+
+    </security:http>
+
+
+<!--    配置认证管理器-->
+    <security:authentication-manager >
+<!--        配置认证提供者-->
+        <security:authentication-provider user-service-ref="springSecurityService">
+<!--            配置密码加密器-->
+            <security:password-encoder ref="encoder"/>
+        </security:authentication-provider>
+
+
+    </security:authentication-manager>
+
+<!--注册密码加密器-->
+    <bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+<!--    开启权限控制的注解支持·-->
+    <security:global-method-security pre-post-annotations="enabled"/>
+
+
+
+
+
+
+ </beans>

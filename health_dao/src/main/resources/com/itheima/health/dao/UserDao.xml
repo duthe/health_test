@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.itheima.health.dao.UserDao">
+
+    <select id="findByUsername" parameterType="string" resultMap="UserDetailMap">
+        select
+            tu.id, tu.password, tu.username,
+            tr.id role_id, tr.keyword role_keyword,
+            tp.id permission_id, tp.keyword permission_keyword
+        from
+            t_user tu left join t_user_role tur on tu.id = tur.user_id
+            left join t_role tr on tur.role_id = tr.id
+            left join t_role_permission trp on tr.id = trp.role_id
+            left join t_permission tp on trp.permission_id = tp.id
+        where
+             tu.username = #{username}
+
+    </select>
+
+    <resultMap id="UserDetailMap" type="User" >
+        <id property="id" column="id"/>
+        <result property="password" column="password"/>
+        <result property="username" column="username"/>
+
+        <collection property="roles" ofType="Role">
+            <id property="id" column="role_id"/>
+            <result property="keyword" column="role_keyword"/>
+            <collection property="permissions" ofType="Permission">
+                <id property="id" column="permission_id"/>
+                <result property="keyword" column="permission_keyword"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+
+</mapper>
