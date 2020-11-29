@@ -1,9 +1,13 @@
 package com.itheima.health.controller;
 
+import com.itheima.health.constant.MessageConstant;
 import com.itheima.health.entity.Result;
 import com.itheima.health.exception.HealthException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -46,7 +50,38 @@ public class HealthExceptionAdvice {
     }
 
 
+    /**
+     * 密码错误
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(BadCredentialsException.class)
+    public Result handleBadCredentialsException(BadCredentialsException e) {
+//        logger.debug("密码错误", e);
+        return new Result(false, "密码错误！");
+    }
 
+
+    /**
+     * 账号错误
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public Result handleInternalAuthenticationServiceException(InternalAuthenticationServiceException e) {
+//        logger.debug("账号错误", e);
+        return new Result(false, "账号错误！");
+    }
+
+    /**
+     * 没有权限
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public Result handleAccessDeniedException(AccessDeniedException e) {
+        return new Result(false, "没有权限执行此操作！");
+    }
 
 
 

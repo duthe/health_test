@@ -10,6 +10,7 @@ import com.itheima.health.pojo.Setmeal;
 import com.itheima.health.service.SetMealService;
 import com.itheima.health.utils.QiNiuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/setmeal")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_HEALTH_MANAGER')")
 public class SetMealController {
 
     @Reference

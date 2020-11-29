@@ -24,6 +24,7 @@
                              password-parameter="password"
                              default-target-url="/pages/main.html"
                              always-use-default-target="true"/>
+<!--        TODO: 改异步登录 并提示错误信息-->
 
 <!--    文档嵌套访问策略-->
         <security:headers>

@@ -37,13 +37,14 @@ public class SpringSecurityService implements UserDetailsService {
                     Set<Permission> permissions = role.getPermissions();
 
                     if (permissions != null){
-                        //判断权限不会空 遍历权限 添加到权限集合
+                        //判断权限不为空 遍历权限 添加到权限集合
                         permissions.forEach(permission -> {
                             authorities.add(new SimpleGrantedAuthority(permission.getKeyword()));
                         });
                     }
                 });
             }
+
             return new org.springframework.security.core.userdetails.User(username, user.getPassword(), authorities);
         }
         return null;
