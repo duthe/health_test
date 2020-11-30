@@ -11,12 +11,13 @@
         <!-- 引入样式 -->
         <link rel="stylesheet" href="plugins/elementui/index.css">
         <link rel="stylesheet" href="css/login.css">
+        <script src="js/axios-0.18.0.js"></script>
     </head>
     <body class="hold-transition skin-purple sidebar-mini">
         <div id="app">
             <div class="login-container">
                 <div class="loginBox">
-                  <form method="post" class="login-form" action="/login.do" label-position="left">
+                  <form method="post" class="login-form" action="/login.do" label-position="left" onsubmit="return false">
                       <div class="title-container">
                         <div class="logoInfo clearfix">
                           <em class="logo"></em>
@@ -26,15 +27,15 @@
                         <span class="svg-container svg-container_login">
                           <span class="user"></span>
                         </span>
-                        <input type="text" name="username" placeholder="请输入用户名" value="admin" />
+                        <input type="text" v-model="loginInfo.username" name="username" placeholder="请输入用户名"  />
                       </div>
                       <div>
                         <span class="svg-container">
                           <span class="username"></span>
                         </span>
-                        <input type="password" name="password" placeholder="请输入密码" value="1234"/>
+                        <input type="password" v-model="loginInfo.password" name="password" placeholder="请输入密码" />
                       </div>
-                      <input type="submit" style="width:100%;margin-bottom:30px;" value="登录"></input>
+                      <input type="submit" style="width:100%;margin-bottom:30px;" value="登录" @click="userLogin()"/>
                 </form>
                 </div>
               </div>
@@ -43,4 +44,37 @@
     <!-- 引入组件库 -->
     <script src="js/vue.js"></script>
     <script src="plugins/elementui/index.js"></script>
+
+    <script>
+        var vue = new Vue({
+            el:"#app",
+            data:{
+                loginInfo:{}
+            },
+            methods:{
+                userLogin(){
+                    //security json数据不能识别
+                    var param = "username=" + this.loginInfo.username + "&password=" + this.loginInfo.password
+                    axios.post("/login.do", param).then(response=>{
+
+                        //TODO: 服务端security   没有定义登录成功处理 暂时这样解决
+                        if (response.data.flag == undefined) {
+                            window.location = '/pages/main.html';
+                        }
+
+                        if (!response.data.flag) {
+                            this.$message({
+                                      showClose: true,
+                                      message: response.data.message,
+                                      type: 'error'
+                                    });
+                        }
+                    })
+                }
+            }
+        })
+
+    </script>
+
+
 </html>

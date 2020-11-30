@@ -6,7 +6,7 @@
        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
 
-<!--    过滤静态资源 不设置访问权限-->
+<!--    过滤静态资源 设置匿名访问 -->
     <security:http pattern="/login.html" security="none"/>
     <security:http pattern="/css/**" security="none"/>
     <security:http pattern="/img/**" security="none"/>
@@ -16,15 +16,18 @@
 
 <!--    配置拦截规则-->
     <security:http auto-config="true" use-expressions="true">
-<!--        拦截所有路径 认证成功才可以访问-->
+<!--        拦截所有路径 认证成功才可以访问
+        authentication-failure-handler-ref 自定义认证失败处理
+-->
         <security:intercept-url pattern="/**" access="isAuthenticated()"/>
         <security:form-login login-page="/login.html"
                              login-processing-url="/login.do"
                              username-parameter="username"
                              password-parameter="password"
                              default-target-url="/pages/main.html"
+                             authentication-failure-handler-ref="authenticationFailureHandler"
                              always-use-default-target="true"/>
-<!--        TODO: 改异步登录 并提示错误信息-->
+
 
 <!--    文档嵌套访问策略-->
         <security:headers>
@@ -59,6 +62,12 @@
 
 <!--    开启权限控制的注解支持·-->
     <security:global-method-security pre-post-annotations="enabled"/>
+
+<!--    注册认证提供者-->
+    <bean id="springSecurityService" class="com.itheima.health.security.SpringSecurityService"/>
+
+<!--    注册登录失败处理类-->
+    <bean id="authenticationFailureHandler" class="com.itheima.health.security.AuthenticationFailureHandler"/>
 
 
 
