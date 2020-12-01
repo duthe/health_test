@@ -30,4 +30,14 @@ public class MemberServiceImpl implements MemberService {
     public void add(Member member) {
         memberDao.add(member);
     }
+
+    /**
+     * 查询指定日期之前的会员数量
+     * @param month 要查询的起始日期
+     * @return
+     */
+    @Override
+    public Integer findMemberCountBeforeRegTime(String month) {
+        return memberDao.findMemberCountBeforeRegTime(month);
+    }
 }

@@ -16,4 +16,11 @@ public interface MemberService {
      * @param member
      */
     void add(Member member);
+
+    /**
+     * 查询指定日期之前的会员数量
+     * @param month
+     * @return
+     */
+    Integer findMemberCountBeforeRegTime(String month);
 }

@@ -16,4 +16,25 @@ public interface MemberDao {
      * @param member 要添加的会员信息
      */
     void add(Member member);
+
+    /**
+     * 查询指定日期之前的会员数量
+     * @param regTime
+     * @return
+     */
+    Integer findMemberCountBeforeRegTime(String regTime);
+
+    /**
+     * 获取指定日期当天的会员数量
+     * @param regTime
+     * @return
+     */
+    Integer findMemberCountByDate(String regTime);
+
+    /**
+     * 获取指定日期之后的会员数量
+     * @param regTime
+     * @return
+     */
+    Integer findMemberCountAfterRegTime(String regTime);
 }

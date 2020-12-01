@@ -97,4 +97,16 @@
         </collection>
     </resultMap>
 
+
+    <select id="getSetMealReport" resultType="map">
+        select
+            ts.name, o.value
+        from
+            t_setmeal ts,
+            (select setmeal_id, count(0) value from t_order group by setmeal_id) o
+        where
+            ts.id = o.setmeal_id;
+
+    </select>
+
 </mapper>

@@ -17,4 +17,17 @@
         values (#{name}, #{sex}, #{idCard}, #{phoneNumber}, #{regTime}, #{password}, #{remark});
 
     </insert>
+
+
+    <select id="findMemberCountBeforeRegTime" parameterType="string" resultType="int">
+        select count(0) from t_member where regTime &lt;= #{regTime}
+    </select>
+
+    <select id="findMemberCountByDate" parameterType="string" resultType="int">
+        select count(0) from t_member where regTime = #{regTime};
+    </select>
+
+    <select id="findMemberCountAfterRegTime" parameterType="string" resultType="int">
+        select count(0) from t_member where regTime >= #{regTime};
+    </select>
 </mapper>

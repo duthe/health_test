@@ -6,6 +6,7 @@ import com.itheima.health.exception.HealthException;
 import com.itheima.health.pojo.Setmeal;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SetMealService {
 
@@ -70,4 +71,10 @@ public interface SetMealService {
      * @return
      */
     Setmeal findSetMealDetailById(Integer id);
+
+    /**
+     * 获取套餐占比集合 包含套餐名字 和预约占比
+     * @return
+     */
+    List<Map<String, Object>> getSetMealReport();
 }

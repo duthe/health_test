@@ -55,4 +55,37 @@
             tor.member_id = tm.id and tor.setmeal_id = ts.id and tor.id = #{id}
     </select>
 
+    <select id="findOrderNumberByDate" parameterType="string" resultType="int">
+        select count(0) from t_order where orderDate = #{orderDate};
+    </select>
+
+    <select id="findVisitsNumberByDate" parameterType="string" resultType="int">
+        select count(0) from t_order where orderDate = #{orderDate} and orderStatus = "已到诊";
+    </select>
+
+    <select id="findOrderCountBetweenDate" parameterType="string" resultType="int">
+        select count(0) from t_order where orderDate between #{startDate} and #{endDate} ;
+    </select>
+
+    <select id="findVisitsCountAfterDate" parameterType="string" resultType="int">
+        select count(0) from t_order where orderDate >= #{orderDate} and orderStatus = "已到诊";
+    </select>
+
+<!--    获取前5条热门套餐
+        格式 {name:'阳光爸妈升级肿瘤12项筛查（男女单人）体检套餐',setmeal_count:200,proportion:0.222},
+  -->
+    <select id="findHotSetMeal" resultType="map">
+        select
+            t.count setmeal_count ,s.name,s.remark, t.count/sum.total proportion
+        from
+            (select o.setmeal_id, count(0) count from t_order o group by setmeal_id) t,
+            t_setmeal s,
+            (select count(0) total from t_order) sum
+        where
+            s.id = t.setmeal_id
+        order by
+            setmeal_count desc
+        limit 0,5
+    </select>
+
 </mapper>

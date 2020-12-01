@@ -285,8 +285,19 @@ public class DateUtils {
         return calendar.getTime();
     }
 
+    //获得本月最后一天的日期
+    public static Date getLastDay4ThisMonth(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH,1);
+        calendar.add(Calendar.MONTH, 1);
+        calendar.add(Calendar.DAY_OF_MONTH,-1);
+        return calendar.getTime();
+    }
+
     public static void main(String[] args) {
+
         try {
+            System.out.println(parseDate2String(getLastDay4ThisMonth()));
             System.out.println("本周一" + parseDate2String(getThisWeekMonday()));
             System.out.println("本月一日" + parseDate2String(getFirstDay4ThisMonth()));
         } catch (Exception e) {

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Service(interfaceClass = SetMealService.class)
@@ -135,6 +136,16 @@ public class SetMealServiceImpl implements SetMealService {
     @Override
     public Setmeal findSetMealDetailById(Integer id) {
         return setMealDao.findSetMealDetailById(id);
+    }
+
+
+    /**
+     * 获取套餐占比集合 包含套餐名字 和预约占比
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getSetMealReport() {
+        return setMealDao.getSetMealReport();
     }
 
 
