@@ -155,11 +155,23 @@
             <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
         </dependency>
 
-
 <!--        freemarker静态化依赖-->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
+        </dependency>
+
+<!--        JasperReports报表生成工具-->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+        </dependency>
+
+        <!-- iText报表，支持中文 -->
+        <dependency>
+            <groupId>com.alpha</groupId>
+            <artifactId>itextasian</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
     </dependencies>

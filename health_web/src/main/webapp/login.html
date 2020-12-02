@@ -53,21 +53,17 @@
             },
             methods:{
                 userLogin(){
-                    //security json数据不能识别
                     var param = "username=" + this.loginInfo.username + "&password=" + this.loginInfo.password
                     axios.post("/login.do", param).then(response=>{
 
-                        //TODO: 服务端security   没有定义登录成功处理 暂时这样解决
-                        if (response.data.flag == undefined) {
-                            window.location = '/pages/main.html';
-                        }
-
-                        if (!response.data.flag) {
+                        if (response.data.flag) {
+                            window.location.href = '/pages/main.html';
+                        } else {
                             this.$message({
-                                      showClose: true,
-                                      message: response.data.message,
-                                      type: 'error'
-                                    });
+                                showClose: true,
+                                message: response.data.message,
+                                type: 'error'
+                            });
                         }
                     })
                 }

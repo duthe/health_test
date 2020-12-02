@@ -5,16 +5,27 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.itheima.health.constant.MessageConstant;
 import com.itheima.health.constant.RedisMessageConstant;
 import com.itheima.health.entity.Result;
+import com.itheima.health.pojo.CheckGroup;
+import com.itheima.health.pojo.CheckItem;
+import com.itheima.health.pojo.Setmeal;
 import com.itheima.health.service.OrderService;
+import com.itheima.health.service.SetMealService;
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 @RestController
 @RequestMapping("/order")
@@ -25,6 +36,9 @@ public class OrderController {
 
     @Autowired
     private JedisPool jedisPool;
+
+    @Reference
+    private SetMealService setMealService;
 
 
     /**
@@ -69,7 +83,81 @@ public class OrderController {
      */
     @RequestMapping("/findDetailById")
     public Result findDetailById(int id){
-       Map<String, String> resultMap = orderService.findDetailById(id);
+       Map<String, Object> resultMap = orderService.findDetailById(id);
        return new Result(true, MessageConstant.QUERY_ORDER_SUCCESS, resultMap);
+    }
+
+    /**
+     * 导出预约订单信息
+     */
+    @GetMapping("/exportSetMealInfo")
+    public void exportSetMealInfo(int id, HttpServletResponse response) throws Exception {
+//       设置响应头
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition","attachement;filename=setmealInfo.pdf");
+
+        //查询预约信息
+        Map<String, Object> orderInfoMap = orderService.findDetailById(id);
+//        获取订单的套餐ID
+        Integer setMealId = (Integer) orderInfoMap.get("id");
+//        获取订单的套餐详情
+        Setmeal setmeal = setMealService.findSetMealDetailById(setMealId);
+//        创建文件对象
+
+        Document document = new Document();
+//        文件写到输出流
+        PdfWriter.getInstance(document,response.getOutputStream());
+//        打开文档
+        document.open();
+//        设置支持中文
+        BaseFont bfChinese = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+        Font font = new Font(bfChinese);
+//        添加段落 设置预约信息
+        document.add(new Paragraph("预约订单信息",font));
+        document.add(new Paragraph("体检人: " + (String)orderInfoMap.get("member"),font));
+        document.add(new Paragraph("体检套餐: " + (String)orderInfoMap.get("setmeal"),font));
+        document.add(new Paragraph("体检日期: " + (String) orderInfoMap.get("orderDate"),font));
+        document.add(new Paragraph("预约类型: " + (String)orderInfoMap.get("orderType"),font));
+
+//      套餐详情
+        Table table = new Table(3); // 3列  表头
+        table.addCell(buildCell("项目名称",font));
+        table.addCell(buildCell("项目内容",font));
+        table.addCell(buildCell("项目解读",font));
+
+        // 检查组
+        List<CheckGroup> checkGroups = setmeal.getCheckGroups();
+        if(null != checkGroups){
+            for (CheckGroup checkGroup : checkGroups) {
+                // 项目名称列
+                table.addCell(buildCell(checkGroup.getName(),font));
+                // 项目内容, 把所有的检查项拼接
+                List<CheckItem> checkItems = checkGroup.getCheckItems();
+                String checkItemStr = "";
+                if(null != checkItems){
+                    StringJoiner stringJoiner = new StringJoiner(" ");
+                    for (CheckItem checkItem : checkItems) {
+                        stringJoiner.add(checkItem.getName());
+                    }
+                    // 检查项的拼接完成
+                    checkItemStr = stringJoiner.toString();
+                }
+                table.addCell(buildCell(checkItemStr,font));
+                // 项目解读
+                table.addCell(buildCell(checkGroup.getRemark(),font));
+            }
+        }
+        // 添加表格
+        document.add(table);
+        document.close();
+
+    }
+
+
+
+    public Cell buildCell(String content, Font font)
+            throws BadElementException {
+        Phrase phrase = new Phrase(content, font);
+        return new Cell(phrase);
     }
 }

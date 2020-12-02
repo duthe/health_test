@@ -1,6 +1,5 @@
 package com.itheima.health.controller;
 
-import com.itheima.health.constant.MessageConstant;
 import com.itheima.health.entity.Result;
 import com.itheima.health.exception.HealthException;
 import org.slf4j.Logger;
@@ -58,7 +57,7 @@ public class HealthExceptionAdvice {
     @ExceptionHandler(BadCredentialsException.class)
     public Result handleBadCredentialsException(BadCredentialsException e) {
 //        logger.debug("密码错误", e);
-        return new Result(false, "密码错误！");
+        return new Result(false, "账号或密码错误,请检查后重试！");
     }
 
 
@@ -70,7 +69,7 @@ public class HealthExceptionAdvice {
     @ExceptionHandler(InternalAuthenticationServiceException.class)
     public Result handleInternalAuthenticationServiceException(InternalAuthenticationServiceException e) {
 //        logger.debug("账号错误", e);
-        return new Result(false, "账号错误！");
+        return new Result(false, "账号或密码错误，请检查后重试！");
     }
 
     /**

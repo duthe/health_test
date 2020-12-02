@@ -7,14 +7,19 @@ import com.itheima.health.entity.Result;
 import com.itheima.health.service.MemberService;
 import com.itheima.health.service.ReportService;
 import com.itheima.health.service.SetMealService;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
@@ -154,6 +159,38 @@ public class ReportController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+    }
+
+    /**
+     * 导出运营统计数据到PDF
+     *
+     * @return
+     */
+    @GetMapping("/exportPDFReport")
+    public void exportPDFReport(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//        获取模板目录路径
+        String template = request.getSession().getServletContext().getRealPath("template");
+//        模板路径
+        String jrxml = template + File.separator + "health_business.jrxml";
+//        编译后模板路径
+        String jasper = template + File.separator + "health_business.jasper";
+//        编译模板
+        JasperCompileManager.compileReportToFile(jrxml, jasper);
+//        查询运营统计
+        Map<String, Object> reportData = reportService.getBusinessReportData();
+//          取出热门套餐数据
+        List<Map<String,Object>> hotSetMeal = (List<Map<String, Object>>) reportData.get("hotSetmeal");
+//        填充数据到模板
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasper, reportData, new JRBeanCollectionDataSource(hotSetMeal));
+//      设置文件类型为pdf
+        response.setContentType("application/pdf");
+//        设置以附件方式下载 默认文件名
+        response.setHeader("Content-Disposition","attachement;filename=businessReport.pdf");
+//         导出pdf到输出流
+        JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+
 
 
     }

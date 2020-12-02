@@ -31,6 +31,7 @@
                 <div class="notice-article">
                     <div class="info-title">
                         <span class="name">体检预约成功</span>
+                        <input style="font-size: x-small;" id="exportSetMealInfoButton" @click="exportSetMealInfo()" type="button" value="导出预约订单信息">
                     </div>
                     <div class="notice-item">
                         <div class="item-title">预约信息</div>
@@ -64,6 +65,11 @@
             el:'#app',
             data:{
                 orderInfo:{}
+            },
+            methods:{
+                exportSetMealInfo(){
+                    window.location.href = "/order/exportSetMealInfo.do?id="+id;
+                }
             },
             mounted(){
                 axios.get("/order/findDetailById.do?id=" + id).then((response) => {

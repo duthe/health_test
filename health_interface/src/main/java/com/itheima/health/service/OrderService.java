@@ -20,5 +20,5 @@ public interface OrderService {
      * @param id 预约订单id
      * @return 包含预约人姓名 套餐名称 预约日期 预约类型
      */
-    Map<String, String> findDetailById(int id);
+    Map<String, Object> findDetailById(int id);
 }

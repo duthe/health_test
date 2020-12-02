@@ -48,7 +48,7 @@
 
     <select id="findDetailById" parameterType="int" resultType="map">
         select
-            tm.name member, ts.name setmeal, date_format(tor.orderDate,"%Y-%m-%d") orderDate, tor.orderType
+            tm.name member, ts.name setmeal, date_format(tor.orderDate,"%Y-%m-%d") orderDate, tor.orderType, ts.id
         from
             t_order tor, t_setmeal ts, t_member tm
         where

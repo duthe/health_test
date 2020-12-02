@@ -111,7 +111,7 @@ public class OrderServiceImpl implements OrderService {
      * @return 包含预约人姓名 套餐名称 预约日期 预约类型
      */
     @Override
-    public Map<String, String> findDetailById(int id) {
+    public Map<String, Object> findDetailById(int id) {
         return orderDao.findDetailById(id);
     }
 }
